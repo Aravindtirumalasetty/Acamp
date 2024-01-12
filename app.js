@@ -8,11 +8,14 @@ import path from "path";
 import methodOverride from "method-override";
 import routes from "./routes/campRoutes.js";
 import { seedDB } from "./seeds/index.js";
+import ejsMate from "ejs-mate";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 
+app.engine("ejs", ejsMate);
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
