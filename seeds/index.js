@@ -8,10 +8,15 @@ export const seedDB = async () => {
     await Campground.deleteMany({});
     for (let i = 0; i < 50; i++) {
       const random1000 = Math.floor(Math.random() * 1000);
+      const price = Math.floor(Math.random() * 20) + 10;
 
       const newCampground = new Campground({
         location: `${cities[random1000].city},${cities[random1000].state}`,
         title: `${sample(descriptors)} ${sample(places)}`,
+        image: "https://source.unsplash.com/collection/483251",
+        description:
+          "In this corrected version, I've replaced res.redirect with res.render, assuming that you want to render the view with the campground data. If your intention is to redirect the user to an edit page, you should use res.redirect like this",
+        price,
       });
 
       await newCampground.save({ wtimeout: 60000 });

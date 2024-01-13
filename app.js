@@ -14,6 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+dotenv.config();
 
 app.engine("ejs", ejsMate);
 app.use(express.static("./public"));
@@ -22,7 +23,6 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(cors());
 
-dotenv.config();
 connectDB();
 seedDB();
 
