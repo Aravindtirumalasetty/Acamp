@@ -9,7 +9,9 @@ import methodOverride from "method-override";
 import routes from "./routes/campRoutes.js";
 import { seedDB } from "./seeds/index.js";
 import ejsMate from "ejs-mate";
-
+import "express-async-errors";
+import errorHandlerMiddleware from "./middleware/error-handler.js";
+import notFound from "./middleware/page-not-found.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -34,6 +36,8 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.use(errorHandlerMiddleware);
+app.use(notFound);
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
