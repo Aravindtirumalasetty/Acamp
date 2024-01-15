@@ -1,9 +1,6 @@
 import { validateCampGround } from "../middleware/validate-campground.js";
-import { validateReview } from "../middleware/validate-review.js";
-import campground from "../models/campground.js";
+
 import Campground from "../models/campground.js";
-import review from "../models/review.js";
-import Review from "../models/review.js";
 import catchAsync from "../utils/catchAsync.js";
 
 export const getAllCampgrounds = async (req, res) => {
@@ -15,6 +12,10 @@ export const getCampground = catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id).populate(
     "reviews"
   );
+  if (!campground) {
+    req.flash("error", "Cannot find the campground!");
+    return res.redirect("/campgrounds");
+  }
   res.render("campgrounds/show", { campground });
 });
 
@@ -26,6 +27,7 @@ export const postCampground = catchAsync(async (req, res, next) => {
   // if (!req.body.campground) throw new ExpressError("invalid data", 400);
 
   validateCampGround(req, res, async (err) => {
+    req.flash("success", "successfully made a campground");
     if (err) {
       return next(err);
     }
@@ -37,7 +39,10 @@ export const postCampground = catchAsync(async (req, res, next) => {
 
 export const editCampground = catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id);
-
+  if (!campground) {
+    req.flash("error", "Cannot find the campground!");
+    return res.redirect("/campgrounds");
+  }
   res.render(`campgrounds/edit`, { campground });
 });
 export const saveeditCampground = catchAsync(async (req, res) => {
@@ -49,33 +54,13 @@ export const saveeditCampground = catchAsync(async (req, res) => {
     const campground = await Campground.findByIdAndUpdate(id, {
       ...req.body.campground,
     });
+    req.flash("success", "Successfully updated campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   });
 });
 export const deleteCampground = catchAsync(async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findByIdAndDelete(id);
+  req.flash("success", "Successfully deleted campground!");
   res.redirect(`/campgrounds`);
-});
-
-export const getReviews = catchAsync(async (req, res) => {
-  validateReview(req, res, async (err) => {
-    if (err) {
-      return next(err);
-    }
-    const { id } = req.params;
-    const campground = await Campground.findById(id);
-    const newreview = new Review(req.body.review);
-    campground.reviews.push(newreview);
-    await newreview.save();
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  });
-});
-
-export const deleteReview = catchAsync(async (req, res) => {
-  const { id, reviewId } = req.params;
-  await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-  await Review.findByIdAndDelete(reviewId);
-  res.redirect(`/ campgrounds/${id}`);
 });
