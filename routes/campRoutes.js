@@ -2,9 +2,11 @@ import express from "express";
 import {
   createCampground,
   deleteCampground,
+  deleteReview,
   editCampground,
   getAllCampgrounds,
   getCampground,
+  getReviews,
   postCampground,
   saveeditCampground,
 } from "../controllers/campgrounds.js";
@@ -19,4 +21,7 @@ router
   .put(saveeditCampground)
   .delete(deleteCampground);
 router.route("/campgrounds/:id/edit").get(editCampground);
+router.route("/campgrounds/:id/reviews").post(getReviews);
+router.route("/campgrounds/:id/reviews/:reviewId").delete(deleteReview);
+
 export default router;
