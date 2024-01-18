@@ -7,9 +7,14 @@ export const getAllCampgrounds = async (req, res) => {
 };
 
 export const getCampground = catchAsync(async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate(
-    "reviews"
-  );
+  const campground = await Campground.findById(req.params.id)
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+      },
+    })
+    .populate("author");
   if (!campground) {
     req.flash("error", "Cannot find the campground!");
     return res.redirect("/campgrounds");
@@ -21,28 +26,33 @@ export const createCampground = catchAsync(async (req, res) => {
   res.render("campgrounds/new");
 });
 export const postCampground = catchAsync(async (req, res, next) => {
-  req.flash("success", "successfully made a campground");
-  if (err) {
-    return next(err);
-  }
   const campground = new Campground(req.body.campground);
+  campground.author = req.user._id;
   await campground.save();
+  req.flash("success", "successfully made a campground");
   res.redirect(`/campgrounds/${campground._id}`);
 });
 export const editCampground = catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id);
+
   if (!campground) {
     req.flash("error", "Cannot find the campground!");
     return res.redirect("/campgrounds");
   }
+
   res.render(`campgrounds/edit`, { campground });
 });
 export const saveeditCampground = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  const campground = await Campground.findByIdAndUpdate(id, {
-    ...req.body.campground,
-  });
+  const campground = await Campground.findById(id);
+  if (!campground.author.equals(req.user._id)) {
+    req.flash("error", "You donot have permission to do that !");
+    return res.redirect(`/campgrounds/${id}`);
+  }
+  // const campground = await Campground.findByIdAndUpdate(id, {
+  //   ...req.body.campground,
+  // });
   req.flash("success", "Successfully updated campground!");
   res.redirect(`/campgrounds/${campground._id}`);
 });
