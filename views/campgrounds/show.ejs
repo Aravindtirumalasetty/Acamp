@@ -1,7 +1,9 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/stars.css" />
+
 <div class="row">
   <div class="col-6">
+    <div id="map" style="width: 400px; height: 300px"></div>
     <div
       id="carouselExampleControls"
       class="carousel slide"
@@ -171,3 +173,10 @@
     <%}%>
   </div>
 </div>
+<script>
+  const mapToken =
+    "pk.eyJ1IjoiYXJhdmluZDIxMjUiLCJhIjoiY2xyb2lqZ2VpMTRzNDJqcWpkdnI0bDJpbiJ9.-IGKxyD9jzt8AxZGUke-XQ";
+    const campground = <%- JSON.stringify(campground) %>
+</script>
+</script>
+<script src="/javascripts/showPageMap.js"></script>

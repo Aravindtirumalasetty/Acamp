@@ -1,7 +1,12 @@
 import { cloudinary } from "../cloudinary/index.js";
 import Campground from "../models/campground.js";
 import catchAsync from "../utils/catchAsync.js";
+import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding-v6.js";
 
+const mapBoxToken =
+  process.env.MAPBOX_TOKEN ||
+  "pk.eyJ1IjoiYXJhdmluZDIxMjUiLCJhIjoiY2xyb2lqZ2VpMTRzNDJqcWpkdnI0bDJpbiJ9.-IGKxyD9jzt8AxZGUke-XQ";
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 export const getAllCampgrounds = async (req, res) => {
   const campgrounds = await Campground.find({});
   res.render("campgrounds/index", { campgrounds });
@@ -27,7 +32,15 @@ export const createCampground = catchAsync(async (req, res) => {
   res.render("campgrounds/new");
 });
 export const postCampground = catchAsync(async (req, res, next) => {
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.campground.location,
+      limit: 1,
+    })
+    .send();
+
   const campground = new Campground(req.body.campground);
+  campground.geometry = geoData.body.features[0].geometry;
   campground.images = req.files.map((f) => ({
     url: f.path,
     filename: f.filename,

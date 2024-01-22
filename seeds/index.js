@@ -24,6 +24,13 @@ export const seedDB = async () => {
             filename: "ACamp/qhfji1xmolnjp1snqpkq",
           },
         ],
+        geometry: {
+          type: "Point",
+          coordinates: [
+            cities[random1000].longitude,
+            cities[random1000].latitude,
+          ],
+        },
         description:
           "In this corrected version, I've replaced res.redirect with res.render, assuming that you want to render the view with the campground data. If your intention is to redirect the user to an edit page, you should use res.redirect like this",
         price,
