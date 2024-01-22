@@ -14,7 +14,16 @@ export const seedDB = async () => {
         author: "65a6aa5403f12820672c9218",
         location: `${cities[random1000].city},${cities[random1000].state}`,
         title: `${sample(descriptors)} ${sample(places)}`,
-        image: "https://source.unsplash.com/collection/483251",
+        images: [
+          {
+            url: "https://res.cloudinary.com/dfyyarbvp/image/upload/v1705842349/ACamp/is2txkuqnsr0levrkvqr.png",
+            filename: "ACamp/is2txkuqnsr0levrkvqr",
+          },
+          {
+            url: "https://res.cloudinary.com/dfyyarbvp/image/upload/v1705842370/ACamp/qhfji1xmolnjp1snqpkq.png",
+            filename: "ACamp/qhfji1xmolnjp1snqpkq",
+          },
+        ],
         description:
           "In this corrected version, I've replaced res.redirect with res.render, assuming that you want to render the view with the campground data. If your intention is to redirect the user to an edit page, you should use res.redirect like this",
         price,

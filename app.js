@@ -19,12 +19,14 @@ import flash from "connect-flash";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import User from "./models/user.js";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-dotenv.config();
+
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 connectDB();
 seedDB();
@@ -77,6 +79,7 @@ app.get("/", (req, res) => {
 
 app.use(errorHandlerMiddleware);
 app.use(notFound);
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
