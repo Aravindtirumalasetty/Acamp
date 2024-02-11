@@ -3,19 +3,20 @@
 
 <div class="row">
   <div class="col-6">
-   
+    
     <div
       id="carouselExampleControls"
       class="carousel slide"
       data-bs-ride="carousel"
     >
-      <div class="carousel-inner">
-        <% campground.images.forEach((img,ind) => { %>
-        <div class="carousel-item <%= ind===0?'active':'' %>">
-          <img src="<%= img.url%>" class="d-block w-100" alt="" />
-        </div>
-        <% }) %>
+    <div class="carousel-inner">
+      <% campground.images.forEach((image, i) => {  %>
+      <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+          <img src="<%=image.url%>" alt="" class="d-block w-100" alt="">
       </div>
+      <% }) %>
+    </div>
+
       <% if(campground.images.length > 1) {%>
       <button
         class="carousel-control-prev"

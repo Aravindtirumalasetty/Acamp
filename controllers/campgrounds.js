@@ -25,6 +25,7 @@ export const getCampground = catchAsync(async (req, res) => {
     req.flash("error", "Cannot find the campground!");
     return res.redirect("/campgrounds");
   }
+  console.log(campground);
   res.render("campgrounds/show", { campground });
 });
 
